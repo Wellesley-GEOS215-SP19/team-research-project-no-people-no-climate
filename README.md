@@ -1,4 +1,4 @@
-# team-research-project-no-people-no-climate
+# GEOS 215: Group Research Project
 
 ## Team members: Nhia, Emma, Megan, Jannitta
 
