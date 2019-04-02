@@ -4,7 +4,7 @@ filename = 'latlon.xlsx';
 geos215 = readtable(filename);
 geos215 = table2array(geos215);
 geos215S1 = xlsread(filename,'Sheet2');
-geos215S1 = table2array(geos215S1);
+%geos215S1 = table2array(geos215S1);
 %%
 figure(1);clf;
     worldmap('USA'); geoshow('landareas.shp','FaceColor','black')
