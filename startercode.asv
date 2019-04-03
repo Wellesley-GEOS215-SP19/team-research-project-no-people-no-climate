@@ -23,19 +23,17 @@ strata = xlsread(filename,'Gas_shale_db');
 
 %%
 %Rock Geo
-filename = 'tblRockGeoData_filt.xlsx';
-rockGeo = xlsread(filename);
-%rockGeo = readtable(filename);
+filename = 'tblRockGeoData_filt.xlsx'; 
+rockGeo = readtable(filename);
 %rockGeo = table2array(rockGeo);
-
+%rockGeo = xlsread(filename,'Sheet2');
 
 %%
 %Chem
-filename = 'xtbXrfChem_filt.xlsx';
-chem = xlsread(filename);
-%chem = readtable(filename);
-%chem = table2array(chem);
-
+filename = 'xtbXrfChem_filt.xlsx'; 
+chem = readtable(filename);
+chem = table2array(chem);
+%geos215S1 = xlsread(filename,'Sheet2');
  
 %% 
  %use something similar to the CO2 data lab to match the LAB_ID values from
