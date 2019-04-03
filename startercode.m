@@ -41,4 +41,8 @@ chem = xlsread(filename);
  %use something similar to the CO2 data lab to match the LAB_ID values from
  %the table and xtb files so that xtb file has corresponding lat and lon so we can graph it
  
+ %longrid = unique(geos215.LONGITUTE);
+ %latgird = unique(geos215.LATITUDE);
+ 
+%%
  
