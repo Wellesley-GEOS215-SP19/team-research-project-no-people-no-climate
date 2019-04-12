@@ -17,8 +17,7 @@ figure(1);clf;
 uniqueEras = unique(strata.Series_System);
 sortedData = sortrows(strata, 10);
 cambrianTable = sortedData(1:11,:);
-devonianTable = sortedData(12:45,:);
-lowerDevonianTable = sortedData(46:63,:);
+devonianTable = sortedData(12:63,:);
 lowerMissTable = sortedData(64:71,:);
 lowerOrdTable = sortedData(72:77,:);
 midDevTable = sortedData(78:348,:);
@@ -37,6 +36,6 @@ upperOrdTable = sortedData(885:1043,:);
 
 figure(2);clf;
     usamap({'ME','MS'}); geoshow('landareas.shp','FaceColor','black')
-    scatterm(missTable.LATITUDE, missTable.LONGITUDE, missTable.Quartz_, 'filled'); colorbar;
+    scatterm(devonianTable.LATITUDE, devonianTable.LONGITUDE, 14, 'filled'); colorbar;
 
 
