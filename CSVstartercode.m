@@ -27,9 +27,16 @@ midUpDev = sortedData(353:362,:);
 missTable = sortedData(363:369,:);
 ordTable = sortedData(370:422,:);
 silTable = sortedData(423:461,:);
-
 upperCamTable = sortedData(462,:);
-
 upperDevTable = sortedData(463:884,:);
-
 upperOrdTable = sortedData(885:1043,:);
+%%
+
+%youngest Table: missTable
+%oldest Table: cambrianTable
+
+figure(2);clf;
+    usamap({'ME','MS'}); geoshow('landareas.shp','FaceColor','black')
+    scatterm(missTable.LATITUDE, missTable.LONGITUDE, missTable.Quartz_, 'filled'); colorbar;
+
+
