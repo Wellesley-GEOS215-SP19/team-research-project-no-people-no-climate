@@ -25,10 +25,8 @@ upperDEV = sortedData(463:884,:);
 lowerMISS = sortedData(64:71,:);
 MISS = sortedData(363:369,:); %youngest Table: missTable
 
-periods = {CAMBRIAN; upperCAM; ORD; midORD; lowerORD; upperORD; SIL; DEVONIAN; ...
-    midDEV; midUpDEV; upperDEV; lowerMISS; MISS};
-periodNAMES = {'CAMBRIAN' 'CAMBRIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'SILURIAN' 'DEVONIAN' ...
-    'DEVONIAN' 'DEVONIAN' 'DEVONIAN' 'MISSISSIPPIAN' 'MISSISSIPPIAN'};
+periods = {DEVONIAN; midDEV; midUpDEV; upperDEV; CAMBRIAN; upperCAM; ORD; midORD;  lowerORD; upperORD; SIL; lowerMISS; MISS};
+periodNAMES = { 'DEVONIAN' 'DEVONIAN' 'DEVONIAN' 'DEVONIAN' 'CAMBRIAN' 'CAMBRIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'SILURIAN''MISSISSIPPIAN' 'MISSISSIPPIAN'};
 
 %% Quartz map only
 figure(1);clf;
@@ -70,7 +68,7 @@ figure(6);clf;
     xlabel('% quartz'); ylabel('% illite');
     
 %% data visualized by time era (grouped by overall period) 2 4 1 4 2
-periodCOLOR = {'rbkk' 'rbkk' 'rbk' 'rbk' 'rbk' 'rbk' 'rb' 'rbww' 'rbww' 'rbww' 'rbww' 'rbwwww' 'rbwwww'};
+periodCOLOR = {'rbbww' 'rbbww' 'rbbww' 'rbbww' 'rrb' 'rrb' 'rb' 'rb' 'rb' 'rb' 'rbww' 'rbbwwww' 'rbbwwww'};
 figure(7);clf;
 usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black'); hold on;
 for i=1:13
