@@ -68,14 +68,23 @@ figure(6);clf;
     xlabel('% quartz'); ylabel('% illite');
     
 %% data visualized by time era (grouped by overall period) 2 4 1 4 2
-periodCOLOR = {'rbbww' 'rbbww' 'rbbww' 'rbbww' 'rrb' 'rrb' 'rb' 'rb' 'rb' 'rb' 'rbww' 'rbbwwww' 'rbbwwww'};
+periodCOLOR = {'rbbww' 'rbbww' 'rbbww' 'rbbww' 'rrb' 'rrb' 'rb' 'rb' 'rb' 'rb' 'rbww' 'rbbbwwwwww' 'rbbbwwwwww'};
 figure(7);clf;
 usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black'); hold on;
 for i=1:13
     scatterm(periods{i}.LATITUDE, periods{i}.LONGITUDE, 25, nicecolor(periodCOLOR{i}), 'filled'); hold on;
     %legend(periodNAMES{i});hold on;
 end
-    
+%% total clay vs other minerals
+figure(8);clf;
+    scatter(strata.TotalClay_, strata.Feldspar_, [], nicecolor('RRw'),'filled');
+    xlabel('% clay'); ylabel('% feldspar');
+figure(9);clf;
+    scatter(strata.TotalClay_, strata.Illite_, [], nicecolor('bgw'),'filled');
+    xlabel('% clay'); ylabel('% illite');
+figure(10);clf;
+    scatter(strata.TotalClay_, strata.Carbonate_, [], nicecolor('Yyw'),'filled');
+    xlabel('% clay'); ylabel('% carbonate');
 
 
 
