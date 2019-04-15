@@ -28,6 +28,18 @@ MISS = sortedData(363:369,:); %youngest Table: missTable
 periods = {DEVONIAN; midDEV; midUpDEV; upperDEV; CAMBRIAN; upperCAM; ORD; midORD;  lowerORD; upperORD; SIL; lowerMISS; MISS};
 periodNAMES = { 'DEVONIAN' 'DEVONIAN' 'DEVONIAN' 'DEVONIAN' 'CAMBRIAN' 'CAMBRIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'SILURIAN''MISSISSIPPIAN' 'MISSISSIPPIAN'};
 
+%% same as above for rockGeo
+period = {'Precambrian' 'Cambrian' 'Paleozoic' 'Ordovician' 'Silurian' 'Devonian' 'Mississippian' 'Pennsylvanian'...
+    'Permian' 'Triassic' 'Mesozoic' 'Jurassic' 'Cretaceous' 'Tertiary' 'PalEocene' 'Eocene' 'Oligocene' 'Miocene'...
+    'Pliocene' 'Quaternary' 'Pleistocene' 'Holocene'};
+period = categorical(period);
+GEOL_AGE_filt = categorical(rockGeo.GEOL_AGE_filt);
+rockperiods = NaN*zeros(length(rockGeo.GEOL_AGE_filt),1);
+for i=1:22
+    ind = find(GEOL_AGE_filt == period(i));
+    rockperiods(ind)= i;
+end
+
 %% Quartz map only
 figure(1);clf;
     usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
@@ -85,6 +97,9 @@ figure(9);clf;
 figure(10);clf;
     scatter(strata.TotalClay_, strata.Carbonate_, [], nicecolor('Yyw'),'filled');
     xlabel('% clay'); ylabel('% carbonate');
-
-
+%% large figure showing regional "age" NOT TO SCALE
+figure(11);
+    usamap({'ME','AL'}); geoshow('landareas.shp','FaceColor','black');hold on;
+    scatterm(rockGeo.LATITUDE, rockGeo.LONGITUDE, [], rockperiods, 'filled'); colorbar; hold on;
+ 
 
