@@ -2,56 +2,62 @@
 %Paleozoic
     filename = 'Paleozoic_strata_1994-2012_filt.csv'; 
     strata = readtable(filename);
+    strata = sortrows(strata,10); %this line was lower in the next part but makes more sense to put it here
 %Rock Geo
     filename = 'tblRockGeoData_filt.csv';
     rockGeo = readtable(filename);
 
-%% Era Sorting 
+%% Period sorting for STRATA
 uniqueEras = unique(strata.Series_System);
-sortedData = sortrows(strata, 10);
 
-% arranged oldest to youngest with most general era older
-CAMBRIAN = sortedData(1:11,:); %oldest Table: cambrianTable
-upperCAM = sortedData(462,:);
-ORD = sortedData(370:422,:);
-midORD = sortedData(349:352,:);
-lowerORD = sortedData(72:77,:);
-upperORD = sortedData(885:1043,:);
-SIL = sortedData(423:461,:);
-DEVONIAN = sortedData(12:63,:);
-midDEV = sortedData(78:348,:);
-midUpDEV = sortedData(353:362,:);
-upperDEV = sortedData(463:884,:);
-lowerMISS = sortedData(64:71,:);
-MISS = sortedData(363:369,:); %youngest Table: missTable
+%Assigning numbers to STRATA periods so they are mappable with each period=number 
+strataPERIODS = NaN*zeros(1043,1);
 
-periods = {DEVONIAN; midDEV; midUpDEV; upperDEV; CAMBRIAN; upperCAM; ORD; midORD;  lowerORD; upperORD; SIL; lowerMISS; MISS};
-periodNAMES = { 'DEVONIAN' 'DEVONIAN' 'DEVONIAN' 'DEVONIAN' 'CAMBRIAN' 'CAMBRIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'ORDOVICIAN' 'SILURIAN''MISSISSIPPIAN' 'MISSISSIPPIAN'};
-
-%% same as above for rockGeo
-period = {'Precambrian' 'Cambrian' 'Paleozoic' 'Ordovician' 'Silurian' 'Devonian' 'Mississippian' 'Pennsylvanian'...
+CAMBRIAN = strata(1:11,:); %oldest Table: cambrianTable
+        strataPERIODS(1:11) =  2;
+upperCAM = strata(462,:);
+        strataPERIODS(462) = 2.5;
+ORD = strata(370:422,:);
+        strataPERIODS(370:422) = 4;
+midORD = strata(349:352,:);
+        strataPERIODS(349:352) = 4.3;
+lowerORD = strata(72:77,:);
+        strataPERIODS(72:77) = 4.6;
+upperORD = strata(885:1043,:);
+        strataPERIODS(885:1043) = 4.9;
+SIL = strata(423:461,:);
+        strataPERIODS(423:461) = 5;
+DEVONIAN = strata(12:63,:);
+        strataPERIODS(12:63,:) = 6;
+midDEV = strata(78:348,:);
+        strataPERIODS(78:348) = 6.3;
+midUpDEV = strata(353:362,:);
+        strataPERIODS(353:362) = 6.6;
+upperDEV = strata(463:884,:);
+        strataPERIODS(463:884) = 6.9;
+lowerMISS = strata(64:71,:);
+        strataPERIODS(64:71) = 7;
+MISS = strata(363:369,:); %youngest Table: missTable
+        strataPERIODS(363:369) = 7.5;
+%% Period sorting for ROCKGEO -- same as above, but does it in a loop 
+rockNAMES = {'Precambrian' 'Cambrian' 'Paleozoic' 'Ordovician' 'Silurian' 'Devonian' 'Mississippian' 'Pennsylvanian'...
     'Permian' 'Triassic' 'Mesozoic' 'Jurassic' 'Cretaceous' 'Tertiary' 'PalEocene' 'Eocene' 'Oligocene' 'Miocene'...
     'Pliocene' 'Quaternary' 'Pleistocene' 'Holocene'};
-period = categorical(period);
-GEOL_AGE_filt = categorical(rockGeo.GEOL_AGE_filt);
-rockperiods = NaN*zeros(length(rockGeo.GEOL_AGE_filt),1);
+rockNAMES = categorical(rockNAMES); %makes names categorical 
+GEOL_AGE_filt = categorical(rockGeo.GEOL_AGE_filt); %preps the data to be categorical so you can sort by each period name
+rockperiods = NaN*zeros(length(rockGeo.GEOL_AGE_filt),1); %makes an index of the periods for each 
 for i=1:22
-    ind = find(GEOL_AGE_filt == period(i));
+    ind = find(GEOL_AGE_filt == rockNAMES(i));
     rockperiods(ind)= i;
 end
 
-%% Quartz map only
+%% Mapping Quartz from STRATA data set
 figure(1);clf;
     usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
     scatterm(strata.LATITUDE, strata.LONGITUDE, strata.Quartz_, 'filled'); colorbar;
     
-%% Devonian time map
+%% Mapping Quartz, Feldspar, and Total Clay from STRATA data set
 figure(2);clf;
-    usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
-    scatterm(DEVONIAN.LATITUDE, DEVONIAN.LONGITUDE, 14, 'filled'); colorbar;
-
-%% Quartz, Feldspar, and Total Clay maps
-figure(3);clf;
     subplot(221);
         usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
         scatterm(strata.LATITUDE, strata.LONGITUDE, [], strata.Quartz_, 'filled'); colorbar; hold on;
@@ -65,7 +71,7 @@ figure(3);clf;
         scatterm(strata.LATITUDE, strata.LONGITUDE,[], strata.TotalClay_, 'filled'); colorbar;
         hcb=colorbar; title(hcb,'% total clay');
 
-%% Quartz vs Total clay
+%% Plotting Quartz vs Total Clay, Feldspar, Carbonate, and Illite
 figure(3);clf;
     scatter(strata.Quartz_, strata.TotalClay_, [], nicecolor('RRw'),'filled');
     xlabel('% quartz'); ylabel('% total clay');
@@ -79,15 +85,14 @@ figure(6);clf;
     scatter(strata.Quartz_, strata.Illite_, [], nicecolor('RBw'),'filled');
     xlabel('% quartz'); ylabel('% illite');
     
-%% data visualized by time era (grouped by overall period) 2 4 1 4 2
-periodCOLOR = {'rbbww' 'rbbww' 'rbbww' 'rbbww' 'rrb' 'rrb' 'rb' 'rb' 'rb' 'rb' 'rbww' 'rbbbwwwwww' 'rbbbwwwwww'};
+%% Mapping STRATA data by period (periods assigned to a number but NOT TO (time)SCALE) 
 figure(7);clf;
 usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black'); hold on;
-for i=1:13
-    scatterm(periods{i}.LATITUDE, periods{i}.LONGITUDE, 25, nicecolor(periodCOLOR{i}), 'filled'); hold on;
-    %legend(periodNAMES{i});hold on;
+for i=1:length(unique(strataPERIODS))
+    %ind = find(strataPERIODS == i);
+    scatterm(strata.LATITUDE, strata.LONGITUDE, 25, strataPERIODS, 'filled'); colorbar; hold on;
 end
-%% total clay vs other minerals
+%% Plotting Total Clay vs Feldspar, Illite, Carbonate
 figure(8);clf;
     scatter(strata.TotalClay_, strata.Feldspar_, [], nicecolor('RRw'),'filled');
     xlabel('% clay'); ylabel('% feldspar');
@@ -97,9 +102,17 @@ figure(9);clf;
 figure(10);clf;
     scatter(strata.TotalClay_, strata.Carbonate_, [], nicecolor('Yyw'),'filled');
     xlabel('% clay'); ylabel('% carbonate');
-%% large figure showing regional "age" NOT TO SCALE
+%% Mapping ROCKGEO data by period (periods assigned to a number but NOT TO (time)SCALE) 
 figure(11);
-    usamap({'ME','AL'}); geoshow('landareas.shp','FaceColor','black');hold on;
+    usamap({'ME','TX'}); geoshow('landareas.shp','FaceColor','black');hold on;
     scatterm(rockGeo.LATITUDE, rockGeo.LONGITUDE, [], rockperiods, 'filled'); colorbar; hold on;
  
-
+%% Plotting Quartz vs Total Clay colored by period from STRATA data set
+figure(12);clf;
+    scatter(strata.Quartz_, strata.TotalClay_, [], strataPERIODS,'filled'); colorbar;
+    xlabel('% quartz'); ylabel('% total clay');
+    
+%% Plotting the ratio of Quartz/Total Clay by period
+figure(13);clf;
+    scatter(strataPERIODS, (strata.Quartz_./strata.TotalClay_), 'filled');
+    xlabel('% periods (numeric, check indices)'); ylabel('Quartz/Total Clay');
