@@ -54,7 +54,8 @@ end
 %% Mapping Quartz from STRATA data set
 figure(1);clf;
     usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
-    scatterm(strata.LATITUDE, strata.LONGITUDE, strata.Quartz_, 'filled'); colorbar;
+    scatterm(strata.LATITUDE, strata.LONGITUDE,[], strata.Quartz_, 'filled'); colorbar;
+
     
 %% Mapping Quartz, Feldspar, and Total Clay from STRATA data set
 figure(2);clf;
@@ -116,3 +117,25 @@ figure(12);clf;
 figure(13);clf;
     scatter(strataPERIODS, (strata.Quartz_./strata.TotalClay_), 'filled');
     xlabel('% periods (numeric, check indices)'); ylabel('Quartz/Total Clay');
+%% Mapping Carbonate from STRATA data set
+figure(14);clf;
+    usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
+    scatterm(strata.LATITUDE, strata.LONGITUDE, [],strata.Carbonate_, 'filled'); colorbar;
+%% Mapping Pyrite from STRATA data set
+figure(15);clf;
+    usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
+    scatterm(strata.LATITUDE, strata.LONGITUDE,[], strata.Pyrite_, 'filled'); colorbar;
+%% Plotting the ratio of Quartz/Carbonate by period
+figure(16);clf;
+    scatter(strataPERIODS, (strata.Quartz_./strata.Carbonate_), 'filled');
+    xlabel('% periods (numeric, check indices)'); ylabel('Quartz/Carbonate');
+%% Plotting the ratio of Feldspar/Carbonate by period
+figure(16);clf;
+    scatter(strataPERIODS, (strata.Feldspar_./strata.Carbonate_), 'filled');
+    xlabel('% periods (numeric, check indices)'); ylabel('Feldspar/Carbonate');
+%% Plotting the ratio of Total Clay/Carbonate by period
+figure(16);clf;
+    scatter(strataPERIODS, (strata.TotalClay_./strata.Carbonate_), 'filled');
+    xlabel('% periods (numeric, check indices)'); ylabel('Total Clay/Carbonate');
+    
+    
