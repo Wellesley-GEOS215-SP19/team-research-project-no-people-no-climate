@@ -43,12 +43,11 @@ MISS = strata(363:369,:); %youngest Table: missTable
 rockNAMES = {'Precambrian' 'Cambrian' 'Paleozoic' 'Ordovician' 'Silurian' 'Devonian' 'Mississippian' 'Pennsylvanian'...
     'Permian' 'Triassic' 'Mesozoic' 'Jurassic' 'Cretaceous' 'Tertiary' 'PalEocene' 'Eocene' 'Oligocene' 'Miocene'...
     'Pliocene' 'Quaternary' 'Pleistocene' 'Holocene'};
-rockNamesFlipped = fliplr(rockNAMES);
 rockNAMES = categorical(rockNAMES); %makes names categorical 
 GEOL_AGE_filt = categorical(rockGeo.GEOL_AGE_filt); %preps the data to be categorical so you can sort by each period name
 rockperiods = NaN*zeros(length(rockGeo.GEOL_AGE_filt),1); %makes an index of the periods for each 
 for i=1:22
-    ind = find(GEOL_AGE_filt == rockNamesFlipped(i));
+    ind = find(GEOL_AGE_filt == rockNAMES(i));
     rockperiods(ind)= i;
 end
 
@@ -98,7 +97,7 @@ figure(6);clf;
 %% Mapping STRATA data by period (periods assigned to a number but NOT TO (time)SCALE) 
 figure(7);clf;
 usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black'); hold on;
-for i=length(unique(strataPERIODS)):-1:1
+for i=1:length(unique(strataPERIODS))
     %ind = find(strataPERIODS == i);
     scatterm(strata.LATITUDE, strata.LONGITUDE, 25, strataPERIODS, 'filled'); colorbar; hold on;
 end
