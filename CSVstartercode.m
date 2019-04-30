@@ -115,7 +115,7 @@ figure(10);clf;
 %% Mapping ROCKGEO data by period (periods assigned to a number but NOT TO (time)SCALE) 
 figure(11);
     usamap({'ME','TX'}); geoshow('landareas.shp','FaceColor','black');hold on;
-    scatterm(rockGeo.LATITUDE, rockGeo.LONGITUDE, [], rockperiods, 'filled'); colorbar; hold on;
+    scatterm(rockGeo.LATITUDE, rockGeo.LONGITUDE, [], rockperiods, 'filled'); colormap(cmocean('deep')); hold on;
  
 %% Plotting Quartz vs Total Clay colored by period from STRATA data set
 figure(12);clf;
