@@ -51,17 +51,31 @@ figure(2);clf;
         scatterm(strata.LATITUDE, strata.LONGITUDE,[], strata.TotalClay_, 'filled'); colorbar;
         hcb=colorbar; title(hcb,'% total clay');
 
-%% Plotting Quartz vs Total Clay
+%% Plotting Quartz vs Total Clay WITH LINE
+minerals = table2array(strata(:,[2,3,54:63]));
+minerals(any(isnan(minerals), 2), :) = []; %array with just LAT, LONG, and minerals
+
+P= polyfit(minerals(:,3), minerals(:,12), 1); 
+[rho,df,rho_sig95] = correlate(minerals(:,3), minerals(:,12));
+XtoPlot = [10:70];    
+
 figure(3);clf;
-    scatter(strata.Quartz_, strata.TotalClay_, [], nicecolor('RRw'),'filled');
+    scatter(minerals(:,3), minerals(:,12), [], strata.Series_System(~any(isnan(minerals),2),:),'filled'); colorbar;hold on;
+    plot(XtoPlot, P(1)*XtoPlot + P(2), 'r--', 'LineWidth', 3); 
     xlabel('% quartz'); ylabel('% total clay');
-    hold on
-    P= polyfit(strata.Quartz_, strata.TotalClay_, 1); 
-% [rho,df,rho_sig95] = correlate(strata.Quartz_,strata.TotalClay_);
-XtoPlot = [1:7];    
-%     figure(8); clf; 
-    plot(XtoPlot, P(1)*XtoPlot + P(2), 'r--', 'LineWidth', 1); 
-    hold off
+    text(50, 60, {'-0.743*x + 76 = y';'R^2=0.379'},'FontSize',14);
+    legend([]);
+    %%
+c = colormap(jet(14));
+figure(30); clf;
+for i=1:length(x)
+    scatter(strata.Quartz_(strata.Series_System==x(i)), strata.TotalClay_(strata.Series_System==x(i)),[],c(i,:),'filled'); hold on;
+    legend([]);
+end
+    plot(XtoPlot, P(1)*XtoPlot + P(2), 'k--', 'LineWidth', 3); 
+    xlabel('% quartz'); ylabel('% total clay');
+    text(50, 60, {'-0.743*x + 76 = y';'R^2=0.379'},'FontSize',14);
+    legend(x);
 %% Plotting quartz vs Feldspar, Carbonate, and Illite
 figure(4);clf;
     scatter(strata.Quartz_, strata.Feldspar_, [], nicecolor('bgw'),'filled');
