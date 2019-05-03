@@ -13,27 +13,29 @@ rockNAMES = {'Precambrian' 'Cambrian' 'Paleozoic' 'Ordovician' 'Silurian' 'Devon
     'Pliocene' 'Quaternary' 'Pleistocene' 'Holocene'};
 rockNamesFlipped = fliplr(rockNAMES);
 rockNAMES = categorical(rockNAMES); %makes names categorical 
-GEOL_AGE_filt = categorical(rockGeo.GEOL_AGE_filt); %preps the data to be categorical so you can sort by each period name
+rockGeo.GEOL_AGE_filt = categorical(rockGeo.GEOL_AGE_filt); %preps the data to be categorical 
+rockGeo.GEOL_AGE_filt = categorical(rockGeo.GEOL_AGE_filt, rockNAMES); %now categories are in order
 rockperiods = NaN*zeros(length(rockGeo.GEOL_AGE_filt),1); %makes an index of the periods for each 
 for i=1:22
-    ind = find(GEOL_AGE_filt == rockNamesFlipped(i));
+    ind = find(rockGeo.GEOL_AGE_filt == rockNamesFlipped(i));
     rockperiods(ind)= i;
 end
 %% Period sorting for STRATA
-strataNAMES = unique(strata.Series_System);
-    stratanum = [21	17	17	16	19	17	19	17	16	19	18	22	17	19]; %index numbers are same as rockperiods
-strataNAMES = categorical(strataNAMES); %makes names categorical
+    periodnum = [16	16	17	17	17	17	17	18	19	19	19	19	21	22]; %index numbers are same as rockperiods
+strataNAMES = categorical(unique(strata.Series_System)); %makes names categorical
 strata.Series_System = categorical(strata.Series_System); %preps the data as categorical
+strata.Series_System = categorical(strata.Series_System,{'Cambrian'	'Upper Cambrian' 'Ordovician' 'Lower Ordovician'...
+    'Middle Ordovician'	'Upper Ordovician' 'Silurian' 'Devonian' 'Lower Devonian' 'Middle Devonian'	...
+    'Middle/Upper Devonian'	'Upper Devonian' 'Mississippian'	'Lower Mississippian'} );
 strataperiods = NaN*zeros(length(strata.Series_System),1); %makes an index of the periods for each
 for i=1:14
     ind = find(strata.Series_System == strataNAMES(i));
-    strataperiods(ind)= stratanum(i); %assigns index numbers that are the same as rockperiods
+    strataperiods(ind)= periodnum(i); %assigns index numbers that are the same as rockperiods
 end
 %% Mapping Quartz from STRATA data set
 figure(1);clf;
     usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
     scatterm(strata.LATITUDE, strata.LONGITUDE,[], strata.Quartz_, 'filled'); colorbar;
-    
 %% Mapping Quartz, Feldspar, and Total Clay from STRATA data set
 figure(2);clf;
     subplot(221);
@@ -124,19 +126,21 @@ figure(16);clf;
     scatter(strataperiods, (strata.TotalClay_./strata.Carbonate_), 'filled');
     xlabel('% periods (numeric, check indices)'); ylabel('Total Clay/Carbonate');
     
-%% Plotting minerals by period
+%% Makes 3D array of minerals by Series_System and std, N=#samples
 minerals = {'Quartz_', 'Feldspar_', 'Chlorite_', 'TotalClay_'};
-mineraltable = NaN*zeros(14, 4, 3);  %makes a table for averages and std and N
-for i=1:(length(unique(strata.Series_System)))
+x = cellstr(categories(strata.Series_System));
+mineraltable = NaN*zeros(length(x), 4, 3);  %makes a table for averages and std and N
+for i=1:length(x)
     for j=1:4
-        mineraltable(i,j,1) = mean(strata.(minerals{j})(find(strata.Series_System == strataNAMES(i))), 'omitnan');
-        mineraltable(i,j,2) = std(strata.(minerals{j})(find(strata.Series_System == strataNAMES(i))), 'omitnan');
-        ind = size(find((strata.(minerals{j})(find(strata.Series_System == strataNAMES(i))))>0));
+        mineraltable(i,j,1) = mean(strata.(minerals{j})(strata.Series_System==x(i)), 'omitnan');
+        mineraltable(i,j,2) = std(strata.(minerals{j})(strata.Series_System==x(i)), 'omitnan');
+        ind = size(find(strata.(minerals{j})(strata.Series_System==x(i)))>0);
         mineraltable(i,j,3) = ind(1);
     end
 end
-%%
-figure(17)
+
+%% Makes 4 subplots plotting minerals by Series_System
+figure(18)
 for i=1:4
 	subplot(2,2,i);
     bar(unique(strata.Series_System), mineraltable(:,i,1)); hold on 
@@ -147,3 +151,58 @@ for i=1:4
     xt = get(gca, 'XTick');
     set(gca, 'FontSize', 10)
 end
+
+%% time series for STRATA
+axis tight manual % this ensures that getframe() returns a consistent size
+filename = 'Quartz.gif';
+h = figure(1); %IF YOU GET AN ERROR: the figure has to be closed out before it can be rerun!
+usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black');hold on;
+for i=1:length(x)
+        x1=strata.LATITUDE(strata.Series_System==x(i));
+        y1=strata.LONGITUDE(strata.Series_System==x(i));
+        z1=strata.Quartz_(strata.Series_System==x(i));
+        scatterm(x1,y1,[],z1,'filled'); colormap(cmocean('matter')); caxis([10 60]); 
+        h1 = colorbar; set(get(h1,'label'),'string','QUARTZ');
+        title(x(i));
+    drawnow 
+      % Capture the plot as an image 
+      frame = getframe(h); 
+      im{i} = frame2im(frame); 
+end
+for i = 1:length(x)
+    [A,map] = rgb2ind(im{i},256);
+    if i == 1
+        imwrite(A,map,filename,'gif','LoopCount',Inf,'DelayTime',0.5);
+    else
+        imwrite(A,map,filename,'gif','WriteMode','append','DelayTime',0.5);
+    end
+end
+      
+%% time series for Clays
+axis tight manual % this ensures that getframe() returns a consistent size
+filename = 'Clays.gif';
+h = figure(2); %IF YOU GET AN ERROR: the figure has to be closed out before it can be rerun!
+usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black');hold on;
+for i=1:length(x)
+        x1=strata.LATITUDE(strata.Series_System==x(i));
+        y1=strata.LONGITUDE(strata.Series_System==x(i));
+        z1=strata.TotalClay_(strata.Series_System==x(i));
+        scatterm(x1,y1,[],z1,'filled'); colormap(cmocean('turbid')); caxis([10 80]); 
+        h1 = colorbar; set(get(h1,'label'),'string','TOTAL CLAY');
+        title(x(i));
+    drawnow 
+      % Capture the plot as an image 
+      frame = getframe(h); 
+      im{i} = frame2im(frame); 
+end
+for i = 1:length(x)
+    [A,map] = rgb2ind(im{i},256);
+    if i == 1
+        imwrite(A,map,filename,'gif','LoopCount',Inf,'DelayTime',0.5);
+    else
+        imwrite(A,map,filename,'gif','WriteMode','append','DelayTime',0.5);
+    end
+end
+
+
+
