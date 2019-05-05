@@ -68,6 +68,7 @@ figure(3);clf;
     %%
 c = colormap(jet(14));
 figure(30); clf;
+x = cellstr(categories(strata.Series_System));
 for i=1:length(x)
     scatter(strata.Quartz_(strata.Series_System==x(i)), strata.TotalClay_(strata.Series_System==x(i)),[],c(i,:),'filled'); hold on;
     legend([]);
