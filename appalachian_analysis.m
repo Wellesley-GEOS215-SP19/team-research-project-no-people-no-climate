@@ -110,37 +110,7 @@ figure(11);
     usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black');hold on;
     scatterm(rockGeo.LATITUDE, rockGeo.LONGITUDE, [], rockperiods, 'filled'); 
     colormap(cmocean('thermal')); h = colorbar; set( h, 'YDir', 'reverse' )
-%% Plotting Quartz vs Total Clay colored by period from STRATA data set
-figure(12);clf;
-    scatter(strata.Quartz_, strata.TotalClay_, [], strata.Series_System,'filled');
-    legend('Cambrian', 'Ordovician', 'Silurian', 'Devonian', 'Mississippian');
-    xlabel('% quartz'); ylabel('% total clay');
-    
-%% Plotting the ratio of Quartz/Total Clay by period
-figure(13);clf;
-    scatter(strataperiods, (strata.Quartz_./strata.TotalClay_), 'filled');
-    xlabel('% periods (numeric, check indices)'); ylabel('Quartz/Total Clay');
-%% Mapping Carbonate from STRATA data set
-figure(14);clf;
-    usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
-    scatterm(strata.LATITUDE, strata.LONGITUDE, [],strata.Carbonate_, 'filled'); colorbar;
-%% Mapping Pyrite from STRATA data set
-figure(15);clf;
-    usamap({'ME','GA'}); geoshow('landareas.shp','FaceColor','black')
-    scatterm(strata.LATITUDE, strata.LONGITUDE,[], strata.Pyrite_, 'filled'); colorbar;
-%% Plotting the ratio of Quartz/Carbonate by period
-figure(16);clf;
-    scatter(strataperiods, (strata.Quartz_./strata.Carbonate_), 'filled');
-    xlabel('% periods (numeric, check indices)'); ylabel('Quartz/Carbonate');
-%% Plotting the ratio of Feldspar/Carbonate by period
-figure(16);clf;
-    scatter(strataperiods, (strata.Feldspar_./strata.Carbonate_), 'filled');
-    xlabel('% periods (numeric, check indices)'); ylabel('Feldspar/Carbonate');
-%% Plotting the ratio of Total Clay/Carbonate by period
-figure(16);clf;
-    scatter(strataperiods, (strata.TotalClay_./strata.Carbonate_), 'filled');
-    xlabel('% periods (numeric, check indices)'); ylabel('Total Clay/Carbonate');
-    
+
 %% Makes 3D array of minerals by Series_System and std, N=#samples
 minerals = {'Quartz_', 'Feldspar_', 'Chlorite_', 'TotalClay_'};
 x = cellstr(categories(strata.Series_System));
