@@ -9,10 +9,12 @@
 ### Other Deliverables:
 
 ### Clays.gif
+Figure 1: GIF showing how clay concentration of the Appalachians changes over geologic time
 ![Clays gif](/Figures/Clays.gif)
-#### Figure 1: GIF showing how clay concentration of the Appalachians changes over geologic time
+
 
 ### Quartz.gif
+Figure 2: GIF showing how quartz concentration of the Appalachians changes over geologic time
 ![Quartz gif](/Figures/Quartz.gif)
-#### Figure 2: GIF showing how quartz concentration of the Appalachians changes over geologic time
+
 
