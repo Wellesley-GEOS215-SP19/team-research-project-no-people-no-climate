@@ -7,10 +7,11 @@
 2.  **appalachian_analysis.mlx**: MATLAB live script that allows users to replicate our analysis. 
 
 ### Other Deliverables:
-#### GIF showing how clay concentration of the Appalachians changes over geologic time
+
 ![Clays gif](/Figures/Clays.gif)
+#### Figure 1: GIF showing how clay concentration of the Appalachians changes over geologic time
 
-#### GIF showing how quartz concentration of the Appalachians changes over geologic time
+
 ![Quartz gif](/Figures/Quartz.gif)
-
+#### Figure 2: GIF showing how quartz concentration of the Appalachians changes over geologic time
 
